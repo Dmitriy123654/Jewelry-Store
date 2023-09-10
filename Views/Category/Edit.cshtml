@@ -1,11 +1,11 @@
 ﻿@model Category
 
 
-<form method="post" asp-action="Create">
+<form method="post">
+    <input asp-for="CategoryId" hidden />
     <div class="border p-3">
-        @*<div asp-validation-summary="ModelOnly" class="text-danger" ></div>*@
         <div class="form-group row">
-            <h2 class="text-info pl-3">Add Category</h2>
+            <h2 class="text-info pl-3">Edit Category</h2>
         </div>
         <div class="row">
             <div class="col-8">
@@ -33,7 +33,7 @@
                     <div class="col-8 offset-4 row">
 
                         <div class="col">
-                           <input type="submit" class="btn btn-info w-100" value="Create"/>
+                           <input type="submit" class="btn btn-info w-100" value="Update"/>
                         </div>
                         <div class="col">
                              <a asp-controller="Category" asp-action="Index" class="btn btn-success w-100">Back</a>
