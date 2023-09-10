@@ -28,7 +28,6 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Category category)
         {
-            //валидация на стороне клиента
             if (ModelState.IsValid)
             {
                 db.Categories.Add(category);
