@@ -26,7 +26,65 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(ApplicationType applicationType)
         {
-            db.ApplicationTypes.Add(applicationType);
+            if (ModelState.IsValid)
+            {
+                db.ApplicationTypes.Add(applicationType);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(applicationType);
+        }
+
+        //GET - EDIT
+        public IActionResult Edit(int? id)
+        {
+            if(id == null || id == 0)
+            {
+                return NotFound();
+            }
+            var applicationType = db.ApplicationTypes.Find(id);
+            if (applicationType == null)
+            {
+                return NotFound();
+            }
+            return View(applicationType);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(ApplicationType applicationType)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Update(applicationType);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            
+            return View(applicationType);
+        }
+
+
+        //GET - DELETE
+        public IActionResult Delete(int? id)
+        {
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+            var applicationType = db.ApplicationTypes.Find(id);
+            if (applicationType == null)
+            {
+                return NotFound();
+            }
+            return View(applicationType);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeletePost(ApplicationType applicationType)
+        {
+           
+            db.ApplicationTypes.Remove(applicationType);
             db.SaveChanges();
             return RedirectToAction("Index");
         }
