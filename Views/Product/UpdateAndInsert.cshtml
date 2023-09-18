@@ -4,7 +4,7 @@
 }
 
 <form method="post" enctype="multipart/form-data">
-    @if (Model.Product.CategoryId != 0)
+    @if (Model?.Product.CategoryId != 0)
     {
         title = "Edit Product";
         <input asp-for="Product.CategoryId" hidden />
@@ -59,7 +59,7 @@
                         <label asp-for="Product.CategoryId"></label>
                     </div>
                     <div class="col-8">
-                        <select asp-for="Product.CategoryId" asp-items="@Model.CategorySelectList" class="form-control">
+                        <select asp-for="Product.CategoryId" asp-items="@Model?.CategorySelectList" class="form-control">
                             <option disabled selected>--Select Category--</option>
                         </select>
                         <span asp-validation-for="Product.CategoryId" class="text-danger"></span>
@@ -70,7 +70,7 @@
                     <div class="col-8 offset-4 row">
 
                         <div class="col">
-                            @if (Model.Product.CategoryId != 0)
+                            @if (Model?.Product.ProductId != 0)
                             {
                             //update
                                 <input type="submit" class="btn btn-info w-100" value="Update" />
@@ -99,14 +99,14 @@
 @section Scripts{
 
     @{
-            <partial name="_ValidationScriptsPartial"></partial>
+        <partial name="_ValidationScriptsPartial"></partial>
     }
     <script>
         $(document).ready(function() {
             $('.summernote').summernote({
-                height:250
+                height: 250
             });
-}       );
+        });
         function validateInput() {
             var uploadBox = document.getElementById("uploadBox");
             if (!uploadBox.files.length) {

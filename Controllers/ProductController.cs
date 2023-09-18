@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebApp.Data;
@@ -10,9 +11,11 @@ namespace WebApp.Controllers
     public class ProductController : Controller
     {
         private readonly ApplicationDbContext db;
-        public ProductController(ApplicationDbContext _db)
+        private readonly IWebHostEnvironment webHostEnvironment;
+        public ProductController(ApplicationDbContext _db, IWebHostEnvironment _webHostEnvironment)
         {
             db = _db;
+            webHostEnvironment = _webHostEnvironment;
         }
         public IActionResult Index()
         {
@@ -38,7 +41,6 @@ namespace WebApp.Controllers
             };
             if (id == null)
             {
-                //this is for create
                 return View(productVM);
             }
             else
@@ -54,13 +56,31 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult UpdateAndInsert(ProductVM productVM)
         {
-            if (ModelState.IsValid)
+
+            var files = HttpContext.Request.Form.Files;
+            string webRootPath = webHostEnvironment.WebRootPath; 
+
+            if (productVM.Product.ProductId == 0)
             {
+                string upload = webRootPath + WebConstants.ImagePath;
+                string fileName = Guid.NewGuid().ToString();
+                string extension = Path.GetExtension(files[0].FileName);
+
+                using (var fileStream = new FileStream(Path.Combine(upload, fileName + extension), FileMode.Create))
+                {
+                    files[0].CopyTo(fileStream);
+                }
+
+                productVM.Product.Image = fileName + extension;
                 db.Products.Add(productVM.Product);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            //return View(productVM);
+            else
+            {
+
+            }
+            db.SaveChanges();
             return RedirectToAction("Index");
         }
 
