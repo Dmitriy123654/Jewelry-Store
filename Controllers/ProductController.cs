@@ -140,23 +140,20 @@ namespace WebApp.Controllers
             {
                 return NotFound();
             }
-            var category = db.Categories.Find(id);
-            if (category == null)
+            var product = db.Products.Find(id);
+            if (product == null)
             {
                 return NotFound();
             }
-            return View(category);
+            DeletePost(product);
+            return RedirectToAction("Index");
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult DeletePost(int? CategoryId)
+        public IActionResult DeletePost(Product product)
         {
-            var category = db.Categories.Find(CategoryId);
-            if (category == null)
-            {
-                return NotFound();
-            }
-            db.Categories.Remove(category);
+            System.IO.File.Delete($"{Directory.GetCurrentDirectory()}/wwwroot/images/product/{product.Image}");
+            db.Products.Remove(product);
             db.SaveChanges();
             return RedirectToAction("Index");
         }
