@@ -26,8 +26,15 @@ namespace WebApp.Models
         public int CategoryId { get;set; }
         [ForeignKey("CategoryId")]
         [Required]
-        public virtual Category Category { get; set; } 
+        public virtual Category Category { get; set; }
         //public Category Category { get; set; }
+
+        [Display(Name = "Application Type")]
+        [Required]
+        public int ApplicationTypeId { get; set; }
+        [ForeignKey("ApplicationTypeId")]
+        public virtual ApplicationType ApplicationType { get; set; }
+
 
     }
 }
