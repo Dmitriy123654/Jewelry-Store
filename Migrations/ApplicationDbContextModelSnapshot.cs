@@ -66,9 +66,6 @@ namespace WebApp.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductId"));
 
-                    b.Property<int>("ApplicationTypeId")
-                        .HasColumnType("int");
-
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
@@ -88,8 +85,6 @@ namespace WebApp.Migrations
 
                     b.HasKey("ProductId");
 
-                    b.HasIndex("ApplicationTypeId");
-
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Products");
@@ -97,26 +92,13 @@ namespace WebApp.Migrations
 
             modelBuilder.Entity("WebApp.Models.Product", b =>
                 {
-                    b.HasOne("WebApp.Models.ApplicationType", "ApplicationType")
-                        .WithMany("Products")
-                        .HasForeignKey("ApplicationTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("WebApp.Models.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("ApplicationType");
-
                     b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("WebApp.Models.ApplicationType", b =>
-                {
-                    b.Navigation("Products");
                 });
 #pragma warning restore 612, 618
         }
