@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApp.Data;
 
@@ -10,9 +11,11 @@ using WebApp.Data;
 namespace WebApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230921145044_AddApplicationTypeInProductAndProductVM")]
+    partial class AddApplicationTypeInProductAndProductVM
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -98,7 +101,7 @@ namespace WebApp.Migrations
             modelBuilder.Entity("WebApp.Models.Product", b =>
                 {
                     b.HasOne("WebApp.Models.ApplicationType", "ApplicationType")
-                        .WithMany("Products")
+                        .WithMany()
                         .HasForeignKey("ApplicationTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -112,11 +115,6 @@ namespace WebApp.Migrations
                     b.Navigation("ApplicationType");
 
                     b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("WebApp.Models.ApplicationType", b =>
-                {
-                    b.Navigation("Products");
                 });
 #pragma warning restore 612, 618
         }

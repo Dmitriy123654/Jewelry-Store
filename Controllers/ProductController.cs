@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -24,6 +23,7 @@ namespace WebApp.Controllers
             foreach (var obj in objList)
             {
                 obj.Category = db.Categories.FirstOrDefault(x => x.CategoryId == obj.CategoryId);
+                //obj.ApplicationType = db.ApplicationTypes.FirstOrDefault(x => x.ApplicationTypeId == obj.ApplicationTypeId);
             }
             return View(objList);
         }
@@ -38,7 +38,12 @@ namespace WebApp.Controllers
                 {
                     Text = i.Name,
                     Value = i.CategoryId.ToString()
-                })
+                }),
+               /* ApplicationTypeSelectList = db.ApplicationTypes.Select(i => new SelectListItem
+                {
+                    Text = i.Name,
+                    Value = i.ApplicationTypeId.ToString()
+                })*/
             };
             if (id == null)
             {
@@ -57,10 +62,10 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult UpdateAndInsert(ProductVM? productVM)
         {
-            if(productVM.Product.CategoryId != 0 && ModelState["Product.CategoryID"]!.ValidationState == ModelValidationState.Valid ) 
+            if (productVM.Product.CategoryId != 0 && ModelState["Product.CategoryID"]!.ValidationState == ModelValidationState.Valid)
                 ModelState["Product.Category"]!.ValidationState = ModelValidationState.Valid;
 
-            if (ModelState.IsValid )
+            if (ModelState.IsValid)
             {
                 var files = HttpContext.Request.Form.Files;
                 string webRootPath = webHostEnvironment.WebRootPath;
@@ -129,6 +134,11 @@ namespace WebApp.Controllers
                 Text = i.Name,
                 Value = i.CategoryId.ToString()
             });
+            /*productVM.ApplicationTypeSelectList = db.ApplicationTypes.Select(i => new SelectListItem
+            {
+                Text = i.Name,
+                Value = i.ApplicationTypeId.ToString()
+            });*/
             return View(productVM);
         }
 
@@ -140,23 +150,25 @@ namespace WebApp.Controllers
             {
                 return NotFound();
             }
-            var category = db.Categories.Find(id);
-            if (category == null)
+            var product = db.Products.Find(id);
+            if (product == null)
             {
                 return NotFound();
             }
-            return View(category);
+            DeletePost(id);
+            return RedirectToAction("Index");
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult DeletePost(int? CategoryId)
+        public IActionResult DeletePost(int? productId)
         {
-            var category = db.Categories.Find(CategoryId);
-            if (category == null)
+            var product = db.Products.Find(productId);
+            if (product == null)
             {
                 return NotFound();
             }
-            db.Categories.Remove(category);
+            System.IO.File.Delete($"{Directory.GetCurrentDirectory()}/wwwroot/images/product/{product.Image}");
+            db.Products.Remove(product);
             db.SaveChanges();
             return RedirectToAction("Index");
         }
