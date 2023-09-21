@@ -4,10 +4,11 @@
 }
 
 <form method="post" enctype="multipart/form-data">
-    @if (Model?.Product.CategoryId != 0)
+    @if (Model?.Product.ProductId != 0)
     {
         title = "Edit Product";
-        <input asp-for="Product.CategoryId" hidden />
+        <input asp-for="Product.ProductId" hidden />
+        <input asp-for="Product.Image" hidden />
     }
 
     <div class="border p-3">
@@ -88,8 +89,12 @@
                     </div>
                 </div>
             </div>
-            <div class="col-4">
+            <div class="col-4 pt-0">
                 @* Keep this empty *@
+                @if (Model.Product.ProductId != 0)
+                {
+                    <img src="@WebConstants.ImagePath@Model.Product.Image" width="100%" alt="Image Deleted" style="border-radius:5px; border:1px solid #bbb" />
+                }
             </div>
         </div>
     </div>

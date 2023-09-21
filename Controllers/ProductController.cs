@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebApp.Data;
@@ -54,36 +55,82 @@ namespace WebApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult UpdateAndInsert(ProductVM productVM)
+        public IActionResult UpdateAndInsert(ProductVM? productVM)
         {
+            if(productVM.Product.CategoryId != 0 && ModelState["Product.CategoryID"]!.ValidationState == ModelValidationState.Valid ) 
+                ModelState["Product.Category"]!.ValidationState = ModelValidationState.Valid;
 
-            var files = HttpContext.Request.Form.Files;
-            string webRootPath = webHostEnvironment.WebRootPath; 
-
-            if (productVM.Product.ProductId == 0)
+            if (ModelState.IsValid )
             {
-                string upload = webRootPath + WebConstants.ImagePath;
-                string fileName = Guid.NewGuid().ToString();
-                string extension = Path.GetExtension(files[0].FileName);
-
-                using (var fileStream = new FileStream(Path.Combine(upload, fileName + extension), FileMode.Create))
+                var files = HttpContext.Request.Form.Files;
+                string webRootPath = webHostEnvironment.WebRootPath;
+                if (productVM.Product.ProductId == 0)
                 {
-                    files[0].CopyTo(fileStream);
-                }
+                    string upload = webRootPath + WebConstants.ImagePath;
+                    string fileName = Guid.NewGuid().ToString();
+                    string extension = Path.GetExtension(files[0].FileName);
 
-                productVM.Product.Image = fileName + extension;
-                db.Products.Add(productVM.Product);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                    using (var fileStream = new FileStream(Path.Combine(upload, fileName + extension), FileMode.Create))
+                    {
+                        files[0].CopyTo(fileStream);
+                    }
+
+                    productVM.Product.Image = fileName + extension;
+                    db.Products.Add(productVM.Product);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    var product = db.Products.AsNoTracking().FirstOrDefault(u => u.ProductId == productVM.Product.ProductId);
+                    if (files.Count > 0)
+                    {
+                        string upload = webRootPath + WebConstants.ImagePath;
+                        string fileName = Guid.NewGuid().ToString();
+                        string extension = Path.GetExtension(files[0].FileName);
+
+
+                        var oldFile = Path.Combine(upload, product.Image);
+
+                        if (System.IO.File.Exists(oldFile))
+                        {
+                            System.IO.File.Delete(oldFile);
+                        }
+
+                        using (var fileStream = new FileStream(Path.Combine(upload, fileName + extension), FileMode.Create))
+                        {
+                            files[0].CopyTo(fileStream);
+                        }
+
+                        productVM.Product.Image = fileName + extension;
+                    }
+                    else
+                    {
+                        productVM.Product.Image = product.Image;
+                    }
+                    db.Products.Update(productVM.Product);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
             }
             else
             {
+                foreach (var modelState in ViewData.ModelState.Values)
+                {
+                    foreach (var error in modelState.Errors)
+                    {
+                        Console.WriteLine(error.ErrorMessage);
+                    }
+                }
 
             }
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            productVM.CategorySelectList = db.Categories.Select(i => new SelectListItem
+            {
+                Text = i.Name,
+                Value = i.CategoryId.ToString()
+            });
+            return View(productVM);
         }
-
 
 
         //GET - Delete
