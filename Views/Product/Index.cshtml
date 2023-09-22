@@ -23,15 +23,22 @@
                     <th>
                         Price
                     </th>
-                    <th></th>
+                    <th>
+                        Category
+                    </th>
+                     <th>
+                        Application Type
+                    </th
                 </tr>
             </thead>
             <tbody>
                 @foreach(var x in Model)
                 {
                     <tr>
-                        <td width="50%">@x.Name</td>
-                        <td width="30%">@x.Price</td>
+                        <td width="30%">@x.Name</td>
+                        <td width="10%">@x.Price</td>
+                        <td width="20%">@x.Category.Name</td>
+                        <td width="20%">@x.ApplicationType.Name</td>
                         <td class="text-center">
                             <div class="w-50% btn-group" role="group">
                                 <a  asp-route-Id="@x.ProductId"asp-action="UpdateAndInsert" class="btn btn-primary mx-2"> <i class="fa-regular fa-pen-to-square"></i> </a>

@@ -24,6 +24,7 @@ namespace WebApp.Controllers
             foreach (var obj in objList)
             {
                 obj.Category = db.Categories.FirstOrDefault(x => x.CategoryId == obj.CategoryId);
+                obj.ApplicationType = db.ApplicationTypes.FirstOrDefault(x => x.ApplicationTypeId == obj.ApplicationTypeId);
             }
             return View(objList);
         }
@@ -38,6 +39,11 @@ namespace WebApp.Controllers
                 {
                     Text = i.Name,
                     Value = i.CategoryId.ToString()
+                }),
+                ApplicationTypeySelectList = db.ApplicationTypes.Select(i => new SelectListItem
+                {
+                    Text = i.Name,
+                    Value = i.ApplicationTypeId.ToString()
                 })
             };
             if (id == null)
@@ -59,6 +65,8 @@ namespace WebApp.Controllers
         {
             if(productVM.Product.CategoryId != 0 && ModelState["Product.CategoryID"]!.ValidationState == ModelValidationState.Valid ) 
                 ModelState["Product.Category"]!.ValidationState = ModelValidationState.Valid;
+            if (productVM.Product.ApplicationTypeId != 0 && ModelState["Product.ApplicationTypeID"]!.ValidationState == ModelValidationState.Valid)
+                ModelState["Product.ApplicationType"]!.ValidationState = ModelValidationState.Valid;
 
             if (ModelState.IsValid )
             {
@@ -122,12 +130,16 @@ namespace WebApp.Controllers
                         Console.WriteLine(error.ErrorMessage);
                     }
                 }
-
             }
             productVM.CategorySelectList = db.Categories.Select(i => new SelectListItem
             {
                 Text = i.Name,
                 Value = i.CategoryId.ToString()
+            });
+            productVM.ApplicationTypeySelectList = db.ApplicationTypes.Select(i => new SelectListItem
+            {
+                Text = i.Name,
+                Value = i.ApplicationTypeId.ToString()
             });
             return View(productVM);
         }

@@ -33,6 +33,7 @@ namespace WebApp.Models
         [Required]
         public int ApplicationTypeId { get; set; }
         [ForeignKey("ApplicationTypeId")]
+        [Required]
         public virtual ApplicationType ApplicationType { get; set; }
 
 
