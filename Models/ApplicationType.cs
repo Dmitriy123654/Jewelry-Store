@@ -7,7 +7,8 @@ namespace WebApp.Models
     {
         [Key]
         public int ApplicationTypeId { get; set; }
+        [Required]
         [DisplayName("Applicatin Type")]
-        public string? Name { get; set; }
+        public string Name { get; set; }
     }
 }
