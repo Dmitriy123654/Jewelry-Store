@@ -20,12 +20,13 @@ namespace WebApp.Controllers
         }
         public IActionResult Index()
         {
-            IEnumerable<Product> objList = db.Products;
-            foreach (var obj in objList)
+            IEnumerable<Product> objList = db.Products.Include(u=>u.Category)
+                                                      .Include(u=>u.ApplicationType);
+           /* foreach (var obj in objList)
             {
                 obj.Category = db.Categories.FirstOrDefault(x => x.CategoryId == obj.CategoryId);
                 obj.ApplicationType = db.ApplicationTypes.FirstOrDefault(x => x.ApplicationTypeId == obj.ApplicationTypeId);
-            }
+            }*/
             return View(objList);
         }
 
