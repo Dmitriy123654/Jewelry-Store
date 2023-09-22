@@ -22,11 +22,6 @@ namespace WebApp.Controllers
         {
             IEnumerable<Product> objList = db.Products.Include(u=>u.Category)
                                                       .Include(u=>u.ApplicationType);
-           /* foreach (var obj in objList)
-            {
-                obj.Category = db.Categories.FirstOrDefault(x => x.CategoryId == obj.CategoryId);
-                obj.ApplicationType = db.ApplicationTypes.FirstOrDefault(x => x.ApplicationTypeId == obj.ApplicationTypeId);
-            }*/
             return View(objList);
         }
 
@@ -64,11 +59,6 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult UpdateAndInsert(ProductVM? productVM)
         {
-            if(productVM.Product.CategoryId != 0 && ModelState["Product.CategoryID"]!.ValidationState == ModelValidationState.Valid ) 
-                ModelState["Product.Category"]!.ValidationState = ModelValidationState.Valid;
-            if (productVM.Product.ApplicationTypeId != 0 && ModelState["Product.ApplicationTypeID"]!.ValidationState == ModelValidationState.Valid)
-                ModelState["Product.ApplicationType"]!.ValidationState = ModelValidationState.Valid;
-
             if (ModelState.IsValid )
             {
                 var files = HttpContext.Request.Form.Files;
