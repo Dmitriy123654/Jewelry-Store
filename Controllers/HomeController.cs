@@ -53,6 +53,18 @@ namespace WebApp.Controllers
 
         }
 
+        public IActionResult Details(int id)
+        {
+            DetailsVM detailsVM = new DetailsVM()
+            {
+                Product = db.Products.Include(u => u.Category)
+                                     .Include(u => u.ApplicationType)
+                                     .Where(u => u.ProductId == id).FirstOrDefault(),
+                ExistsInCart = false
+            };
+            return View(detailsVM);
+        }
+
         public IActionResult Privacy()
         {
             return View();
