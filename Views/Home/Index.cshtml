@@ -1,8 +1,43 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿@using Newtonsoft.Json
+@model WebApp.Models.ViewModels.HomeVM
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<form method="post">
+    <div class="contrainer">
+        <div class="text-center">
+            @*<a asp-action="IndexPost" asp-route-Categories="@Model.Categories" class="btn btn-dark filter-button ">All</a>*@
+            <button asp-action="IndexPost" type="submit" name="category" value="all" class="btn btn-dark">
+                All
+            </button>
+            @*<button class="btn btn-dark filter-button" data-filter="all">All</button>*@
+            @foreach (var obj in Model.Categories)
+            {
+                @*<button class="btn btn-outline-secondary " data-filter="@obj.Name.Replace(' ','_')">
+            @obj.Name
+            </button>*@
+                @*<a asp-action="IndexPost" asp-route-Categorie="@obj.Name" class="btn btn-outline-secondary">@obj.Name </a>*@
+
+                <button asp-action="IndexPost" type="submit" name="category" value="@obj.Name" class="btn btn-outline-secondary">
+                    @obj.Name
+                    <input type="hidden" name="JsonHomeVM" value="@JsonConvert.SerializeObject(Model)">
+                </button>
+            }
+        </div>
+        <br />
+        <div class="row">
+            @foreach (var product in Model.Products)
+            {
+                <partial name="_IndividualProductCard" model="product" />
+
+            }
+        </div>
+    </div>
+</form>
+@section Scripts{
+    <script>
+        $(document).ready(function() {
+            $('button[name="category"]').click(function() {
+                $('form').submit();
+            });
+        });
+    </script>
+}
