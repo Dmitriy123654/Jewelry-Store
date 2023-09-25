@@ -12,8 +12,10 @@ namespace WebApp.Models
         [Required]
         public string Name { get; set; }
         [ValidateNever]
-        public string? ShortDesc { get; set; } 
-        public string Description { get; set; }
+        public string? ShortDesc { get; set; } = "";
+        [Required]
+        public string? Description { get; set; }
+        [Required]
         [Range(1,int.MaxValue)]
         public int Price { get; set; }
         public string? Image { get; set; }
