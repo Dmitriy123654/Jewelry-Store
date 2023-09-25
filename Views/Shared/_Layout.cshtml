@@ -35,10 +35,10 @@
                             </ul>
                         </li>
                         <li>
-                            @if(HttpContextAccessor.HttpContext.Session.Get<List<ShoppingCart>>(WebConstants.SessionCart)!=null){
+                            @if(HttpContextAccessor.HttpContext!.Session.Get<List<ShoppingCart>>(WebConstants.SessionCart)!=null){
                                 <a asp-action="Index" asp-controller="Cart" class="nav-link">
                                     @{
-                                        var count = HttpContextAccessor.HttpContext.Session.Get<List<ShoppingCart>>(WebConstants.SessionCart).Count;
+                                        var count = HttpContextAccessor.HttpContext.Session.Get<List<ShoppingCart>>(WebConstants.SessionCart)?.Count;
                                     }
                                     <i class="fas fa-shopping-cart"> </i> &nbsp; (@count)
                                 </a>
