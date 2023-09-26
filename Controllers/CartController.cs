@@ -15,9 +15,9 @@ namespace WebApp.Controllers
         }
         public IActionResult Index()
         {
-            List<ShoppingCart> shoppingCartList = new List<ShoppingCart>();
+            List<ShoppingCart> shoppingCartList = new();
             if (HttpContext.Session.Get<IEnumerable<ShoppingCart>>(WebConstants.SessionCart) != null
-                && HttpContext.Session.Get<IEnumerable<ShoppingCart>>(WebConstants.SessionCart)!.Count() > 0)
+                && HttpContext.Session.Get<IEnumerable<ShoppingCart>>(WebConstants.SessionCart)!.Any())
             {
                 shoppingCartList = HttpContext.Session.Get<List<ShoppingCart>>(WebConstants.SessionCart)!;
             }
@@ -28,9 +28,9 @@ namespace WebApp.Controllers
 
         public IActionResult Remove(int id)
         {
-            List<ShoppingCart> shoppingCartList = new List<ShoppingCart>();
+            List<ShoppingCart> shoppingCartList = new();
             if (HttpContext.Session.Get<IEnumerable<ShoppingCart>>(WebConstants.SessionCart) != null
-                && HttpContext.Session.Get<IEnumerable<ShoppingCart>>(WebConstants.SessionCart)!.Count() > 0)
+                && HttpContext.Session.Get<IEnumerable<ShoppingCart>>(WebConstants.SessionCart)!.Any())
             {
                 shoppingCartList = HttpContext.Session.Get<List<ShoppingCart>>(WebConstants.SessionCart)!;
             }
