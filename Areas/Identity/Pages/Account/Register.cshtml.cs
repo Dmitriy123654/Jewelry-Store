@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using WebApp.Models;
 
 namespace WebApp.Areas.Identity.Pages.Account
 {
@@ -97,6 +98,9 @@ namespace WebApp.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            public string FullName { get; set; }
+            public string PhoneNumber { get; set; }
         }
 
 
@@ -112,8 +116,9 @@ namespace WebApp.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = CreateUser();
-
+                //var user = CreateUser();
+                var user = new ApplicationUser { UserName=Input.Email, Email = Input.Email, 
+                    PhoneNumber = Input.PhoneNumber, FullName = Input.FullName};
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);
@@ -158,7 +163,7 @@ namespace WebApp.Areas.Identity.Pages.Account
         {
             try
             {
-                return Activator.CreateInstance<IdentityUser>();
+                return Activator.CreateInstance<ApplicationUser>();
             }
             catch
             {
