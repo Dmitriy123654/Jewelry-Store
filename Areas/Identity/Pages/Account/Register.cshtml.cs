@@ -30,20 +30,24 @@ namespace WebApp.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<IdentityUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
             IUserStore<IdentityUser> userStore,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            RoleManager<IdentityRole> roleManager)
         {
+            _roleManager = roleManager;
             _userManager = userManager;
             _userStore = userStore;
             _emailStore = GetEmailStore();
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+
         }
 
         /// <summary>
@@ -106,6 +110,11 @@ namespace WebApp.Areas.Identity.Pages.Account
 
         public async Task OnGetAsync(string returnUrl = null)
         {
+            if(!await _roleManager.RoleExistsAsync(WebConstants.AdminRole))
+            {
+                await _roleManager.CreateAsync(new IdentityRole(WebConstants.AdminRole));
+                await _roleManager.CreateAsync(new IdentityRole(WebConstants.CustomerRole));
+            }
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
@@ -117,14 +126,28 @@ namespace WebApp.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 //var user = CreateUser();
-                var user = new ApplicationUser { UserName=Input.Email, Email = Input.Email, 
-                    PhoneNumber = Input.PhoneNumber, FullName = Input.FullName};
+                var user = new ApplicationUser
+                {
+                    UserName = Input.Email,
+                    Email = Input.Email,
+                    PhoneNumber = Input.PhoneNumber,
+                    FullName = Input.FullName
+                };
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)
                 {
+                    if (User.IsInRole(WebConstants.AdminRole))
+                    {
+                        await _userManager.AddToRoleAsync(user, WebConstants.AdminRole);
+                    }
+                    else
+                    {
+                        await _userManager.AddToRoleAsync(user, WebConstants.CustomerRole);
+                    }
+                    
                     _logger.LogInformation("User created a new account with password.");
 
                     var userId = await _userManager.GetUserIdAsync(user);
