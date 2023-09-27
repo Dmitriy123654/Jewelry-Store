@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WebApp.Data;
 using WebApp.Models;
@@ -6,6 +7,7 @@ using WebApp.Utility;
 
 namespace WebApp.Controllers
 {
+    [Authorize]
     public class CartController : Controller
     {
         private readonly ApplicationDbContext db;
