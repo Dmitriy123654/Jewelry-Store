@@ -1,10 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using WebApp.Models;
 
 namespace WebApp.Data
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext
     {
         
 
@@ -14,6 +15,7 @@ namespace WebApp.Data
         public DbSet<Category> Categories { get; set; }
         public DbSet<ApplicationType> ApplicationTypes { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         
         /*protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

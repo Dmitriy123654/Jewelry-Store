@@ -1,0 +1,99 @@
+﻿@model IEnumerable<Product>
+@{
+    bool temp = false;
+    if (@Model.Any())
+    {
+        temp = true;
+    }
+}
+<form method="post">
+    <br />
+    <div class="backgroundWhiteBorder">
+        <div class="container row">
+            <div class="col -8">
+                <div class="card mt-4">
+                    <div class="card-header bg-dark text-light ml-5 row container" style="--bs-gutter-x: 0;">
+                        <div class="col-6">
+                            <i class="fa fa-shopping-cart"></i> &nbsp;
+                            Shopping Cart
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class=" d-none d-lg-block">
+                            <div class="row" style="color:#821f3d">
+                                <div class="col-lg-2">
+                                </div>
+                                <div class="col-12 col-lg-7">
+                                    Product Details
+                                </div>
+                                <div class="col-12 col-lg-2">
+                                    Price
+                                </div>
+                                <div class="col-6 col-sm-4 col-lg-1">
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr />
+                        @if (temp)
+                        {
+                            @foreach (var obj in Model)
+                            {
+                                <div class="row h-100">
+                                    <div class="col-4 col-md-2 text-center py-2">
+                                        <img src="@WebConstants.ImagePath@obj.Image" class="rounded" width="100%" />
+                                    </div>
+                                    <div class="col-8 col-lg-7">
+                                        <h5>@obj.Name</h5>
+                                        <div style="font-size:11px;">@Html.Raw(@obj.Description)</div>
+                                    </div>
+                                    <div class="col-3 col-lg-2 pt-lg-4" style="font-size:11px;">
+                                        <span style="font-size:17px;"> @obj.Price.ToString($"c2")</span>
+
+                                    </div>
+                                    <div class="col-2 col-lg-1 p-0 pt-lg-4 text-center">
+                                        <a asp-action="Remove" asp-route-Id="@obj.ProductId" class="btn btn-outline-danger">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <hr />
+                            }
+                        }
+                        else
+                        {
+                            <h1 class="text-center">Ваша корзина пуста :(</h1>
+                        }
+                    </div>
+                    @if (temp)
+                    {
+                        <div class="card-footer">
+                            <div class="row justify-content-between">
+                                <div class="col-6 col-md-auto text-start">
+                                    <button asp-controller="Home" asp-action="Index" type="submit" class="btn btn-info form-control">
+                                        <span>Continue Shopping</span>
+                                    </button>
+                                </div>
+                                <div class="col-6 col-md-auto text-end">
+                                    <button asp-action="Index" type="submit" class="btn btn-success form-control">
+                                        <span>Make an Order</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="card-footer">
+                            <div class="row justify-content-between">
+                                <div class="col-6 col-md-12 text-end">
+                                    <a asp-controller="Home" asp-action="Index" class="btn btn-success">Continue Shopping</a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

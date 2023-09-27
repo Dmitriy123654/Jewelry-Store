@@ -11,13 +11,16 @@ namespace WebApp.Models
         public int ProductId { get; set; }
         [Required]
         public string Name { get; set; }
-        [ValidateNever]
+        [Required]
+        [StringLength(35, MinimumLength =3)]
         public string? ShortDesc { get; set; } = "";
         [Required]
-        public string? Description { get; set; }
+        
+        public string? Description { get; set; } = " ";
         [Required]
         [Range(1,int.MaxValue)]
         public int Price { get; set; }
+        
         public string? Image { get; set; }
 
 
