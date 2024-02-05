@@ -5,18 +5,17 @@
 <form method="post">
     <br />
     <div class="backgroundWhiteBorder">
-        <div class="container">
-            <div class="card">
-                <div class="card-header bg-dark text-light ml-0 row container">
-                    <div class="col-6">
-                        <i class="fa fa-shopping-cart"></i> &nbsp;
-                        Order Summary
-                    </div>
-                    <div class="col-6 text-right">
-                        <a class="btn btn-outline-info btn-sm">Back to Cart</a>
-                    </div>
-                </div>
-                <div class="card-body">
+    <div class="container">
+        <div class="card">
+            <div class="card-header bg-dark text-light ml-5 row container" style="--bs-gutter-x: 0;">
+    <div class="col-6">
+        <div class="d-flex align-items-center">
+            <i class="fa fa-shopping-cart"></i> &nbsp;
+            <span>Order Summary</span>
+        </div>
+    </div>
+</div>
+            <div class="card-body">
                     <div class="container rounded p-2">
                         <div class="row">
                             <div class="col-12 col-lg-7 pb-4">
@@ -56,37 +55,45 @@
                             <div class="col-12 col-lg-5 row">
                                 <div class="col-12">
                                     <h4 class="d-flex justify-content-between align-items-center mb-3">
-                                        <span class="text-info"> Order:</span>
+                                        <span class="text-info">Order:</span>
                                     </h4>
                                     <ul class="list-group mb-3">
                                         @foreach (var obj in Model.Products)
                                         {
                                             sumPrice += obj.Price;
-                                            <li class="list-group-item d-flex justify-content-between">
-                                                <div>
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                <div class="col-8">
                                                     <h6 class="my-0">@obj.Name</h6>
-                                                    <small class="text-muted">Price: @obj.Price.ToString("c2")</small>
+                                                    <small class="text-muted">Price: @obj.Price @WebConstants.MonetaryFormat</small>
+                                                </div>
+                                                <div class="col-2 text-end">
+                                                    <img src="@WebConstants.ImagePath@obj.Image" class="rounded" width="50" height="50" alt="@obj.Name" />
                                                 </div>
                                             </li>
                                         }
                                         <li class="list-group-item d-flex justify-content-between text-info">
                                             <div>
                                                 <h6 class="my-0">Total Price</h6>
-                                                <small class="text-muted">@sumPrice.ToString("c2")</small>
+                                                <small class="text-muted">@sumPrice @WebConstants.MonetaryFormat</small>
                                             </div>
                                         </li>
                                     </ul>
                                 </div>
+
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="card-footer">
                     <div class="row">
-                        <div class="col-12 col-md-5 offset-md-7">
-                            <button type="submit" class="btn btn-primary form-control">Submit Inquiry</button>
+                        <div class="col-12 col-md-6">
+                            <a asp-action="Index" class="btn btn-secondary btn-square form-control btn-lg" style="height: 50px;">Back to Cart</a>
                         </div>
+                       <div class="col-12 col-md-6 pb-1">
+                            <button type="submit" class="btn btn-success form-control btn-lg" style="height: 50px;">Send request</button>
+                       </div>
                     </div>
+                  
                 </div>
             </div>
         </div>

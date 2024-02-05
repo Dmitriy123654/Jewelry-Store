@@ -1,6 +1,7 @@
 ﻿@model IEnumerable<Product>
 @{
     bool temp = false;
+    
     if (@Model.Any())
     {
         temp = true;
@@ -48,7 +49,7 @@
                                         <div style="font-size:11px;">@Html.Raw(@obj.Description)</div>
                                     </div>
                                     <div class="col-3 col-lg-2 pt-lg-4" style="font-size:11px;">
-                                        <span style="font-size:17px;"> @obj.Price.ToString($"c2")</span>
+                                        <span style="font-size:17px;"> @obj.Price @WebConstants.MonetaryFormat</span>
 
                                     </div>
                                     <div class="col-2 col-lg-1 p-0 pt-lg-4 text-center">
@@ -68,19 +69,20 @@
                     @if (temp)
                     {
                         <div class="card-footer">
-                            <div class="row justify-content-between">
-                                <div class="col-6 col-md-auto text-start">
-                                    <button asp-controller="Home" asp-action="Index" type="submit" class="btn btn-info form-control">
+                            <div class="row">
+                                <div class="col-12 col-md-6">
+                                    <button asp-controller="Home" asp-action="Index" type="submit" class="btn btn-info btn-square form-control btn-lg" style="height: 50px;">
                                         <span>Continue Shopping</span>
                                     </button>
                                 </div>
-                                <div class="col-6 col-md-auto text-end">
-                                    <button asp-action="Index" type="submit" class="btn btn-success form-control">
+                                <div class="col-12 col-md-6 pb-1">
+                                    <button asp-action="Index" type="submit" class="btn btn-success form-control btn-lg" style="height: 50px;">
                                         <span>Make an Order</span>
                                     </button>
                                 </div>
                             </div>
                         </div>
+                       
                     }
                     else
                     {

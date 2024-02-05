@@ -10,7 +10,7 @@
                         <h1 class="text-white">@Model.Product.Name</h1>
                     </div>
                     <div class="col-12 col-md-6 text-md-end">
-                        <h1 class="text-warning" >@((Model.Product.Price).ToString("c2"))</h1>
+                        <h1 class="text-warning" >@Model.Product.Price @WebConstants.MonetaryFormat</h1>
                     </div>
                 </div>
                 <div class="card-body">

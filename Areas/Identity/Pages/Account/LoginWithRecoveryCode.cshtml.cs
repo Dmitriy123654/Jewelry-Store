@@ -80,15 +80,8 @@ namespace WebApp.Areas.Identity.Pages.Account
             }
 
             var user = await _signInManager.GetTwoFactorAuthenticationUserAsync();
-            if (user == null)
-            {
-                throw new InvalidOperationException($"Unable to load two-factor authentication user.");
-            }
-
             var recoveryCode = Input.RecoveryCode.Replace(" ", string.Empty);
-
             var result = await _signInManager.TwoFactorRecoveryCodeSignInAsync(recoveryCode);
-
             var userId = await _userManager.GetUserIdAsync(user);
 
             if (result.Succeeded)

@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebApp.Data;
@@ -148,13 +146,6 @@ namespace WebApp.Controllers
             {
                 return NotFound();
             }
-            DeletePost(product);
-            return RedirectToAction("Index");
-        }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult DeletePost(Product product)
-        {
             System.IO.File.Delete($"{Directory.GetCurrentDirectory()}/wwwroot/images/product/{product.Image}");
             db.Products.Remove(product);
             db.SaveChanges();

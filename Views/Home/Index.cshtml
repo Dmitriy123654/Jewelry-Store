@@ -2,36 +2,30 @@
 @model WebApp.Models.ViewModels.HomeVM
 
 <form method="post">
-    <div class="contrainer">
+    <div class="container">
         <div class="text-center">
-            @*<a asp-action="IndexPost" asp-route-Categories="@Model.Categories" class="btn btn-dark filter-button ">All</a>*@
-            <button asp-action="IndexPost" type="submit" name="category" value="all" class="btn btn-dark">
+            <button asp-action="IndexPost" type="submit" name="category" value="all" class="btn btn-dark shadow-button">
                 All
             </button>
-            @*<button class="btn btn-dark filter-button" data-filter="all">All</button>*@
             @foreach (var obj in Model.Categories)
             {
-                @*<button class="btn btn-outline-secondary " data-filter="@obj.Name.Replace(' ','_')">
-            @obj.Name
-            </button>*@
-                @*<a asp-action="IndexPost" asp-route-Categorie="@obj.Name" class="btn btn-outline-secondary">@obj.Name </a>*@
-
-                <button asp-action="IndexPost" type="submit" name="category" value="@obj.Name" class="btn btn-outline-secondary">
+                <button asp-action="IndexPost" type="submit" name="category" value="@obj.Name" class="btn btn-outline-secondary shadow-button">
                     @obj.Name
                     <input type="hidden" name="JsonHomeVM" value="@JsonConvert.SerializeObject(Model)">
                 </button>
             }
+           
         </div>
         <br />
         <div class="row">
             @foreach (var product in Model.Products)
             {
                 <partial name="_IndividualProductCard" model="product" />
-
             }
         </div>
     </div>
 </form>
+
 @section Scripts{
     <script>
         $(document).ready(function() {
@@ -40,4 +34,21 @@
             });
         });
     </script>
+    <style>
+        .shadow-button {
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .shadow-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3), 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        .search-input-container {
+            flex-grow: 1;
+          }
+        .smaller-search {
+        width: 200px; /* Задайте нужную ширину */
+        }
+    </style>
 }
