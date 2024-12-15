@@ -85,6 +85,11 @@ namespace WebApp.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = await _userManager.FindByEmailAsync(Input.Email);
+                if (user == null)
+                {
+                    ModelState.AddModelError(string.Empty, "User not found.");
+                    return Page();
+                }
 
                 if (!await _userManager.IsInRoleAsync(user, WebConstants.AdminRole))
                 {
